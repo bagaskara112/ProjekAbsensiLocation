@@ -34,7 +34,7 @@ if (isset($_POST['submit'])) {
     $password = password_hash($_POST['password'], PASSWORD_DEFAULT);
     $role = htmlspecialchars($_POST['role']);
     $status = htmlspecialchars($_POST['status']);
-    $lokasi_presensi = htmlspecialchars($_POST['status']);
+    $lokasi_presensi = htmlspecialchars($_POST['lokasi_presensi']);
 
     if (isset($_FILES['foto'])) {
         $file = $_FILES['foto'];
