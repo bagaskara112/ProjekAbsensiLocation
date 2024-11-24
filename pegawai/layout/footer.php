@@ -148,6 +148,7 @@
 <script src="<?= base_url('assets/jsvectormap/dist/js/jsvectormap.min.js?1692870487') ?>" defer></script>
 <script src="<?= base_url('assets/jsvectormap/dist/maps/world.js?1692870487') ?>" defer></script>
 <script src="<?= base_url('assets/jsvectormap/dist/maps/world-merc.js?1692870487') ?>" defer></script>
+<script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
 <!-- Tabler Core -->
 <script src="<?= base_url('assets/js/tabler.min.js?1692870487') ?>" defer></script>
 <script src="<?= base_url('assets/js/demo.min.js?1692870487') ?>" defer></script>
