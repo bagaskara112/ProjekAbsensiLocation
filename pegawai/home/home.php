@@ -6,6 +6,7 @@ if (!isset($_SESSION["login"])) {
     header("location: ../../auth/login.php?pesan=tolak_akses");
 }
 
+$judul = 'Home';
 include('../layout/header.php');
 include_once("../../config.php");
 
