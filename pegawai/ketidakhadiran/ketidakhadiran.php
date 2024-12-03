@@ -51,7 +51,6 @@ $result = mysqli_query($connection, "SELECT * FROM ketidakhadiran WHERE id_pegaw
                             <a href="edit.php?id=<?= $data['id'] ?>" class="badge bg-success badge-pill">Edit</a>
                             <a href="hapus.php?id=<?= $data['id'] ?>" class="badge badge-pill bg-danger">Hapus</a>
                         </td>
-
                     </tr>
                 <?php endwhile; ?>
             <?php } ?>

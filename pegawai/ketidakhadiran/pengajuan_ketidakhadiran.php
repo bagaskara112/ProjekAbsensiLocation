@@ -43,8 +43,7 @@ if (isset($_POST['submit'])) {
         if (empty($deskripsi)) {
             $pesan_kesalahan[] = "<i class='fa-solid fa-check'></i> Deskripsi wajib diisi";
         }
-
-        if (!in_array(strtolower($ambil_ekstensi),              $ekstensi_diizinkan)) {
+        if (!in_array(strtolower($ambil_ekstensi), $ekstensi_diizinkan)) {
             $pesan_kesalahan[] = "<i class='fa-solid fa-check'></i> Hanya file dengan ekstensi jpg, jpeg, png, dan pdf yang diizinkan";
         }
         if ($ukuran_file > $max_ukuran_file) {
@@ -55,7 +54,6 @@ if (isset($_POST['submit'])) {
             $_SESSION['validasi'] = implode("<br>", $pesan_kesalahan);
         } else {
             $result = mysqli_query($connection, "INSERT INTO ketidakhadiran(id_pegawai, keterangan, deskripsi, tanggal, status_pengajuan, file) VALUES ('$id','$keterangan','$deskripsi','$tanggal','$status_pengajuan','$nama_file')");
-
             $_SESSION['berhasil'] = 'Data berhasil disimpan';
             header("Location: ketidakhadiran.php");
             exit;
@@ -72,20 +70,19 @@ $result = mysqli_query($connection, "SELECT * FROM ketidakhadiran WHERE id_pegaw
         <div class="card col-md-6">
             <form action="" method="POST" enctype="multipart/form-data">
                 <input type="hidden" value="<?= $_SESSION['id'] ?>" name="id_pegawai">
-
                 <div class="mb-3">
                     <label for="">Keterangan</label>
                     <select name="keterangan" class="form-control">
                         <option value="">--Pilih Keterangan--</option>
-                        <option <?php if (isset($_POST['keterangan']) && $_POST['keterangan'] == 'Laki-laki') {
+                        <option <?php if (isset($_POST['keterangan']) && $_POST['keterangan'] == 'Cuti') {
                                     echo 'selected';
-                                } ?> value="Laki-laki">Cuti</option>
-                        <option <?php if (isset($_POST['keterangan']) && $_POST['keterangan'] == 'Perempuan') {
+                                } ?> value="Cuti">Cuti</option>
+                        <option <?php if (isset($_POST['keterangan']) && $_POST['keterangan'] == 'Ijin') {
                                     echo 'selected';
-                                } ?> value="Perempuan">Ijin</option>
-                        <option <?php if (isset($_POST['keterangan']) && $_POST['keterangan'] == 'Perempuan') {
+                                } ?> value="Ijin">Ijin</option>
+                        <option <?php if (isset($_POST['keterangan']) && $_POST['keterangan'] == 'Sakit') {
                                     echo 'selected';
-                                } ?> value="Perempuan">Sakit</option>
+                                } ?> value="Sakit">Sakit</option>
                     </select>
                 </div>
                 <div class="mb-3">
@@ -100,14 +97,10 @@ $result = mysqli_query($connection, "SELECT * FROM ketidakhadiran WHERE id_pegaw
                     <label for="">Surat Keterangan</label>
                     <input type="file" class="form-control" name="file">
                 </div>
-
                 <button type="submit" class="btn btn-primary" name="submit">Ajukan</button>
             </form>
         </div>
     </div>
 </div>
-
-
-
 
 <?php include('../layout/footer.php') ?>
