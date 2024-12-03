@@ -7,19 +7,20 @@ if (!isset($_SESSION["login"])) {
     header("location: ../../auth/login.php?pesan=tolak_akses");
 }
 
-$judul = 'Pengajuan Ketidakhadiran';
+$judul = 'Edit Pengajuan Ketidakhadiran';
 include('../layout/header.php');
 include_once("../../config.php");
 
-if (isset($_POST['submit'])) {
-    $id = $_POST['id_pegawai'];
+if (isset($_POST['update'])) {
+    $id = $_POST['id'];
     $keterangan = $_POST['keterangan'];
     $tanggal = $_POST['tanggal'];
     $deskripsi = $_POST['deskripsi'];
-    $status_pengajuan = 'PENDING';
 
-    if (isset($_FILES['file'])) {
-        $file = $_FILES['file'];
+    if ($_FILES['file_baru']['error'] === 4) {
+        $file_lama = $_POST['file_lama'];
+    } else {
+        $file = $_FILES['file_baru'];
         $nama_file = $file['name'];
         $file_tmp = $file['tmp_name'];
         $ukuran_file = $file['size'];
@@ -42,16 +43,20 @@ if (isset($_POST['submit'])) {
         if (empty($deskripsi)) {
             $pesan_kesalahan[] = "<i class='fa-solid fa-check'></i> Deskripsi wajib diisi";
         }
-        if (!in_array(strtolower($ambil_ekstensi), $ekstensi_diizinkan)) {
-            $pesan_kesalahan[] = "<i class='fa-solid fa-check'></i> Hanya file dengan ekstensi jpg, jpeg, png, dan pdf yang diizinkan";
+        if ($_FILES['file_baru']['error'] !== 4) {
+            if (!in_array(strtolower($ambil_ekstensi), $ekstensi_diizinkan)) {
+                $pesan_kesalahan[] = "<i class='fa-solid fa-check'></i> Hanya file dengan ekstensi jpg, jpeg, png, dan pdf yang diizinkan";
+            }
+            if ($ukuran_file > $max_ukuran_file) {
+                $pesan_kesalahan[] = "<i class='fa-solid fa-check'></i> Ukuran file tidak boleh lebih dari 10MB";
+            }
         }
-        if ($ukuran_file > $max_ukuran_file) {
-            $pesan_kesalahan[] = "<i class='fa-solid fa-check'></i> Ukuran file tidak boleh lebih dari 10MB";
-        }
+        
         if (!empty($pesan_kesalahan)) {
             $_SESSION['validasi'] = implode("<br>", $pesan_kesalahan);
         } else {
-            $result = mysqli_query($connection, "INSERT INTO ketidakhadiran(id_pegawai, keterangan, deskripsi, tanggal, status_pengajuan, file) VALUES ('$id','$keterangan','$deskripsi','$tanggal','$status_pengajuan','$nama_file')");
+            $result = mysqli_query($connection, "UPDATE ketidakhadiran SET keterangan='$keterangan', deskripsi='$deskripsi', tanggal='$tanggal', file='$nama_file' WHERE id='$id'");
+
             $_SESSION['berhasil'] = 'Data berhasil disimpan';
             header("Location: ketidakhadiran.php");
             exit;
@@ -61,9 +66,15 @@ if (isset($_POST['submit'])) {
 
 $_SESSION['gagal'] = null; // Atau nilai default lainnya
 
+$id = $_GET['id'];
+$result = mysqli_query($connection, "SELECT * FROM ketidakhadiran WHERE id=$id ");
+while ($data = mysqli_fetch_array($result)) {
+    $keterangan = $data['keterangan'];
+    $deskripsi = $data['deskripsi'];
+    $file = $data['file'];
+    $tanggal = $data['tanggal'];
+}
 
-$id = $_SESSION['id'];
-$result = mysqli_query($connection, "SELECT * FROM ketidakhadiran WHERE id_pegawai = '$id' ORDER BY id DESC");
 ?>
 
 <div class="page-body">
@@ -75,30 +86,34 @@ $result = mysqli_query($connection, "SELECT * FROM ketidakhadiran WHERE id_pegaw
                     <label for="">Keterangan</label>
                     <select name="keterangan" class="form-control">
                         <option value="">--Pilih Keterangan--</option>
-                        <option <?php if (isset($_POST['keterangan']) && $_POST['keterangan'] == 'Cuti') {
+                        <option <?php if ($keterangan == 'Cuti') {
                                     echo 'selected';
                                 } ?> value="Cuti">Cuti</option>
-                        <option <?php if (isset($_POST['keterangan']) && $_POST['keterangan'] == 'Ijin') {
+                        <option <?php if ($keterangan == 'Ijin') {
                                     echo 'selected';
                                 } ?> value="Ijin">Ijin</option>
-                        <option <?php if (isset($_POST['keterangan']) && $_POST['keterangan'] == 'Sakit') {
+                        <option <?php if ($keterangan == 'Sakit') {
                                     echo 'selected';
                                 } ?> value="Sakit">Sakit</option>
                     </select>
                 </div>
                 <div class="mb-3">
                     <label for="">Deskripsi</label>
-                    <textarea name="deskripsi" class="form-control"></textarea>
+                    <textarea name="deskripsi" class="form-control"><?= $deskripsi ?></textarea>
                 </div>
                 <div class="mb-3">
                     <label for="">Tanggal</label>
-                    <input type="date" class="form-control" name="tanggal">
+                    <input type="date" class="form-control" name="tanggal" value="<?= $tanggal ?>">
                 </div>
                 <div class="mb-3">
                     <label for="">Surat Keterangan</label>
-                    <input type="file" class="form-control" name="file">
+                    <input type="file" class="form-control" name="file_baru">
+                    <input type="hidden" name="file_lama" value="<?= $file  ?>">
                 </div>
-                <button type="submit" class="btn btn-primary" name="submit">Ajukan</button>
+
+                <input type="hidden" name="id" value="<?= $_GET['id']; ?>">
+
+                <button type="submit" class="btn btn-primary" name="update">Update</button>
             </form>
         </div>
     </div>

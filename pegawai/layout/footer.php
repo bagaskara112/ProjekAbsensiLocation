@@ -213,6 +213,26 @@
     <?php unset($_SESSION['validasi']); ?>
 <?php endif; ?>
 
+<!-- alert konfir hapus -->
+<script>
+    $('.tombol-hapus').on('click', function() {
+                var getLink = $(this).attr('href');
+                Swal.fire({
+                    title: "Yakin ingin menghapus data ini?",
+                    text: "Data yang sudah dihapus tidak bisa dikembalikan!",
+                    icon: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#3085d6",
+                    cancelButtonColor: "#d33",
+                    confirmButtonText: "Ya, hapus saja!",
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                            window.location.href = getLink
+                    }
+                })
+                return false;
+            });
+</script>
 </body>
 
 </html>
