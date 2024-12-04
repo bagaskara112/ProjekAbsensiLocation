@@ -44,15 +44,6 @@ if (isset($_POST["login"])) {
 ?>
 
 <!doctype html>
-
-<!-- //Tabler - Premium and Open Source dashboard template with responsive and high quality UI.
-//@version 1.0.0-beta20
-//@link https://tabler.io
-//Copyright 2018-2023 The Tabler Authors
-//Copyright 2018-2023 codecalm.net Paweł Kuna
-//Licensed under MIT (https://github.com/tabler/tabler/blob/master/LICENSE) 
---!>
-
 <html lang="en">
 
 <head>
@@ -82,7 +73,7 @@ if (isset($_POST["login"])) {
     <div class="page page-center">
         <div class="container container-tight py-4">
             <div class="text-center mb-4">
-                <a href="." class="navbar-brand navbar-brand-autodark">
+                <a class="navbar-brand navbar-brand-autodark">
                     <img src="./static/logo.svg" width="110" height="32" alt="Tabler" class="navbar-brand-image">
                 </a>
             </div>
